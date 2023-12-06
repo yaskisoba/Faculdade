@@ -1,0 +1,64 @@
+.data:
+	positive: .asciz "+\n"
+	negative: .asciz  "-\n" 
+	space: .asciz "\n"
+.text:	
+	# sinal -> 1 bit, expoente -> 8 bits, mantissa -> 23 bits
+	#lendo float e colocando em fs2
+	li a7, 6
+	ecall
+	
+	fmv.s fs0, fa0 # input -> fs0
+	
+	li a7, 2
+	ecall
+	
+	la a0, space
+	li a7, 4
+	ecall
+	
+	fsgnj.s fs1, fs0,fs0 #extraindo número inteiro
+	fcvt.w.s s1,fs1  #extraindo número inteiro em float e colocando como inteiro em s1
+	
+	srli s2, s1, 31 #extraindo bit de sinal (bit 31)
+	
+	beqz s2, pos #se for positivo, printa +
+	la a0, negative #se for positivo, printa +
+	li a7, 4
+	ecall
+	j end
+	
+	pos:
+		la a0, positive 
+		li a7, 4
+		ecall
+		
+		j end
+		
+	end:
+		fmv.x.w s3, fs0
+		srli s3, s3, 23
+		slli s3, s3, 24
+		srli s3, s3, 24
+		
+		addi s3, s3, -127
+		
+		mv a0, s3
+		li a7, 1 
+		ecall
+		
+		la a0, space
+		li a7, 4
+		ecall
+		
+		fmv.x.w s4, fs0
+		li s5, 0x007FFFFF   # Máscara para isolar a mantissa (23 bits de fração)
+		and s4, s4, s5  
+
+		mv a0, s4
+		li a7, 34
+		ecall
+		
+		la a0, space
+		li a7, 4
+		ecall

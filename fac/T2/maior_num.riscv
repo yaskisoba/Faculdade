@@ -1,0 +1,51 @@
+.data
+	space: .asciz "\n"
+	
+.text
+	#lendo a quantidade de linhas e colocando em s0
+	li a7, 5
+	ecall
+	
+	mv s0, a0 #tam
+	
+	#lendo o primeiro número e colocando em s1 (onde ficarão os maiores números)
+	li a7, 5 
+	ecall
+	
+	mv s1, a0 #maior_num
+	
+	#criando aux e atribuindo 0 
+	add s2, s2, zero #aux
+	
+	addi s0, s0, -2 #tam - 1
+	while:
+		bgt s2, s0, cont #se aux > tam, sai do while
+		
+		#lendo outro número
+		li a7, 5
+		ecall
+		
+		mv s3, a0
+		
+		
+		bgt s3, s1, pula #se o número lido for maior que o anterior, pula
+		addi s2, s2, 1 #incrementa aux
+		j while #repete o laço
+		pula:
+			mv s1, s3 #s1 = s3
+			addi s2, s2, 1 #incrementa aux
+			j while #repete o laço
+	
+			
+	cont:		
+		mv a0, s1	
+		li a7, 1
+		ecall
+		
+		la a0, space
+		li a7, 4
+		ecall
+	
+	
+	
+	 

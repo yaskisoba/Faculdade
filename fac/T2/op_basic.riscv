@@ -1,0 +1,164 @@
+ .data 
+ 	space: .asciz "\n"
+ 	sum: .asciz "ADD: "
+ 	diff: .asciz "SUB: "
+ 	and_logic: .asciz "AND: "
+ 	or_logic: .asciz "OR: "
+ 	xor_logic: .asciz "XOR: "
+ 	mask: .asciz "MASK: "
+ 	sll_label: .asciz "SLL("
+ 	srl_label: .asciz "SRL("
+ 	close_parentheses: .asciz "): "
+ 
+ .text
+	 li a7, 5
+	 ecall
+	 
+	 mv s0, a0 #lendo "a" e movendo para s0
+	 
+	 
+	 li a7, 5
+	 ecall
+	 
+	 mv s1, a0 #lendo "b" e movendo para s1
+	 
+	 
+	 li a7, 5
+	 ecall
+	 
+	 mv s2, a0 #lendo "c" e movendo para s2
+	 
+	 
+	 add s3, s0, s1 # sum = a + b
+	 sub s4, s0, s1 # diff = a - b
+	 and s5, s0, s1 # and_logic = a & b
+	 or s6, s0, s1 # or_logic = a | b
+	 xor s7, s0, s1 #xor_logic = a ^ b
+	 
+	 andi s8, s2, 31 # m = c & 31
+	 
+	 sll s9, s0, s8 # desloca_a = a << m
+	 srl s10, s1, s8 #desloca_b = b >> m
+	 
+	 #print da adição
+	 li a7, 4
+	 la a0, sum
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s3
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print subtração
+	 li a7, 4
+	 la a0, diff
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s4
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print and
+	 li a7, 4
+	 la a0, and_logic
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s5
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print or
+	 li a7, 4
+	 la a0, or_logic
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s6
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print xor
+	 li a7, 4
+	 la a0, xor_logic
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s7
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print mask
+	 li a7, 4
+	 la a0, mask
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s8
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print sll
+	 li a7, 4
+	 la a0, sll_label
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s8
+	 ecall
+	 
+	 li a7, 4
+	 la a0, close_parentheses
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s9
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 #print srl
+	 li a7, 4
+	 la a0, srl_label
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s8
+	 ecall
+	 
+	 li a7, 4
+	 la a0, close_parentheses
+	 ecall
+	 
+	 li a7, 1
+	 mv a0, s10
+	 ecall
+	 
+	 li a7, 4
+	 la a0, space
+	 ecall
+	 
+	 
+	 

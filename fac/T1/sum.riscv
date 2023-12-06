@@ -1,0 +1,29 @@
+.data
+	space: .asciz "\n"
+
+.text
+#li o primeiro número
+li a7, 5
+ecall
+
+mv t0, a0 #passei o primeiro número pro registrador t0
+
+#li o segundo número
+li a7, 5
+ecall
+
+mv t1, a0  #passei o segundo número pro registrador t1
+
+add t2, t0, t1 #somei
+
+#printInt lar
+li a7, 1 #systemcall printInt
+mv a0, t2 #movi o valor de t2 pra a0 
+ecall
+
+#printStr quebra de linha
+li a7, 4
+la a0, space
+ecall
+
+

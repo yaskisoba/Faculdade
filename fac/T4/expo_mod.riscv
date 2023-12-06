@@ -1,0 +1,166 @@
+.data
+	space: .asciz "\n"
+	inval:	.asciz "Entradas invalidas."
+	nao: .asciz "O modulo nao eh primo."
+	expo: .asciz "A exponencial modular "
+	n2: .asciz " elevado a "
+	mod:  .asciz " (mod "
+	close_path: .asciz ") "
+	value: .asciz "eh "
+	point: .ascii "."
+	
+.text
+	
+	li a7, 5 #lendo n1
+	ecall
+	mv s1, a0 # n1 em s1
+	
+	li a7, 5 #lendo n2
+	ecall
+	mv s2, a0 # n2 em s2
+	
+	li a7, 5 #lendo n3
+	ecall
+	mv s3, a0 # n3 em s3
+	
+	addi t1, t1, 1 # 1
+	li t2, 65535
+	addi t3, t3, 2
+	
+	li s6, 1 #result
+	mv s7, s1 #base
+	mv s8, s2 #exp
+	mv s9, s3 #mod
+	
+	blt s1, t1, input_invalido
+	bgt s1, t2, input_invalido
+	
+	blt s2, t1, input_invalido
+	bgt s2, t2, input_invalido
+	
+	blt s3, t1, input_invalido
+	bgt s3, t2, input_invalido
+	
+	blez s3, nao_primo
+	beq s3, t1, nao_primo
+	beq s3, t3, primo
+	rem t4, s3, t3
+	beqz t4, nao_primo
+	
+	addi t5, t5, 1 # raiz = 1
+	while:
+		mul t6, t5, t5
+		bgt  t6, s3, fim_while
+		addi t5, t5, 1
+		jal while	
+		
+	fim_while:
+		sub t5, t5, t1
+		
+	addi s4, s4, 3 #i
+	addi t5, t5, 1 # raiz + 1 para o for
+	for:
+		bgt s4, t5, primo
+		rem s5, s3, s4
+		beqz s5, if
+		
+		addi s4, s4, 2
+		jal for
+		
+		if: 
+			bne s3, s4, nao_primo
+			addi s4, s4, 2
+			jal for
+	
+	nao_primo:
+		li a7, 4
+		la a0, nao
+		ecall
+		
+		li a7, 4
+		la a0, space
+		ecall
+		
+		jal fim
+		
+	input_invalido:
+		li a7, 4
+		la a0, inval
+		ecall
+		
+		li a7, 4
+		la a0, space
+		ecall	
+		
+		jal fim
+	
+	primo:
+		while_expo:
+		    beqz s8, fim_while_expo
+		
+		    andi t0, s8, 1   # t0 = s8 & 1
+		    beqz t0, skip_multiply
+		
+		    mul s6, s6, s7   # result *= base
+		    remu s6, s6, s9
+
+		skip_multiply:
+		    mul s7, s7, s7   # base *= base
+		    remu s7, s7, s9
+		    srai s8, s8, 1   # exp >>= 1
+		
+		    j while_expo   # jump de volta para o início do loop
+
+		fim_while_expo:
+			
+			
+			li a7, 4
+			la a0, expo
+			ecall
+			
+			li a7, 1
+			mv a0, s1
+			ecall
+			
+			li a7, 4
+			la a0, n2
+			ecall
+			
+			li a7, 1
+			mv a0, s2
+			ecall
+			
+			li a7, 4
+			la a0, mod
+			ecall
+			
+			li a7, 1
+			mv a0, s3
+			ecall
+			
+			li a7, 4
+			la a0, close_path
+			ecall
+			
+			li a7, 4
+			la a0, value
+			ecall
+			
+			li a7, 1
+			mv a0, s6
+			ecall
+			
+			li a7, 4
+			la a0, point
+			ecall
+		
+			li a7, 4
+			la a0, space
+			ecall
+						
+	
+	
+	fim: 
+		
+		
+	

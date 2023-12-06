@@ -1,0 +1,76 @@
+.data
+	space: .asciz "\n"
+	questoes: .space 1000
+	gabarito: .space 1000
+	
+.text
+	#lendo a quantidade de questões
+	li a7, 5
+	ecall 
+	
+	mv t0, a0 #quantidades de questões em t0
+	addi t0, t0, 1
+	add t1, t1, zero # t1 são os acertos
+	
+	#lendo as questões
+	la a0, questoes
+	mv a1, t0
+	li a7, 8
+	ecall
+	
+	#quebra de linha para iniciar a leitura do gabarito
+	la a0, space
+	li a7, 4
+	ecall
+	
+	#leitura do gabarito
+	mv a1, t0
+	la a0, gabarito
+	li a7, 8
+	ecall
+	
+	#quebra de linha
+	la a0, space
+	li a7, 4
+	ecall
+	
+	la t2, questoes 
+	la t3, gabarito
+	
+	add t4, zero, zero
+	
+	for:
+		bgt t4, t0, continua
+		
+		lb t5, 0(t2)
+		lb t6, 0(t3)
+		
+		beqz t5, continua
+		beqz t6, continua
+		
+		beq t5, t6, correto
+		
+		j novo_loop
+	
+	correto:
+		addi t1, t1, 1
+		j novo_loop
+	
+	novo_loop:
+		addi t2, t2, 1
+		addi t3, t3, 1
+		addi t4, t4, 1
+		
+		j for
+	
+	continua:
+		mv a0, t1
+		li a7, 1
+		ecall
+		
+		la a0, space
+		li a7, 4
+		ecall
+	
+		
+	

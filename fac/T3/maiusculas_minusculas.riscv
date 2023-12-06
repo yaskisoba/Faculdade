@@ -1,0 +1,60 @@
+.data
+	space: .asciz "\n"
+	string: .space 1000
+	op: .space 5
+.text	
+	addi t0, zero, 2
+	
+	#lendo a operação (op)
+	la a0, op
+	mv a1, t0
+	li a7, 8
+	ecall
+		
+	#quebra de linha
+	la a0, space
+	li a7, 4
+	ecall
+	
+	#lendo a quantidade de caracteres
+	li a7, 5
+	ecall 
+	
+	mv t1, a0 #quantidades de caracteres em t1
+	addi t1, t1, 1
+	
+	#lendo a string
+	la a0, string
+	mv a1, t1
+	li a7, 8
+	ecall
+	
+	#quebra de linha
+	la a0, space
+	li a7, 4
+	ecall
+	
+	la t2, op
+	la t3, string
+	
+	
+	lb t4, 0(t2)
+	
+	#beq t4, s1, maiuscula 
+	beq t4, s2, minuscula
+	#beq t4, s3, primeira_maiuscula
+	j fim
+	
+	addi t5, zero, 0 # i = 0
+		
+	minuscula:
+		for_min:
+	
+					                                                                                                                                                                 
+	fim:	
+		#printa a string
+		la a0, string
+		li a7, 4
+		ecall
+		
+	
